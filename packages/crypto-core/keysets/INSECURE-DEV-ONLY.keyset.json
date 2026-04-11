@@ -1,0 +1,12 @@
+{
+  "primaryKeyId": 1,
+  "keys": [
+    {
+      "keyId": 1,
+      "status": "ENABLED",
+      "keyType": "AES256_GCM",
+      "version": "1",
+      "keyMaterial": "ZU788C5oE1SThymvbWh2yP2x6NN9/luIuNpiQa/8uKk="
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@secure-data-vault/crypto-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AES-256-GCM envelope encryption with AAD binding — zero external dependencies.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "jest --config jest.config.json"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.17.57",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
+    "typescript": "~5.7.3"
+  }
+}

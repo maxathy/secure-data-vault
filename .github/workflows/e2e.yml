@@ -1,0 +1,58 @@
+name: E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: vault
+          POSTGRES_USER: vault
+          POSTGRES_PASSWORD: vault_dev_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U vault"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build all packages
+        run: yarn build
+
+      - name: Run Drizzle migrations
+        working-directory: apps/vault-api
+        env:
+          DATABASE_URL: postgresql://vault:vault_dev_password@localhost:5432/vault
+        run: npx drizzle-kit push
+
+      - name: Run E2E tests
+        working-directory: apps/vault-api
+        env:
+          DATABASE_URL: postgresql://vault:vault_dev_password@localhost:5432/vault
+          CRYPTO_CORE_MODE: dev
+        run: yarn test:e2e

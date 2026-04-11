@@ -1,0 +1,25 @@
+{
+  "name": "@secure-data-vault/shared-types",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "dependencies": {
+    "zod": "^3.25.17"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.3"
+  }
+}

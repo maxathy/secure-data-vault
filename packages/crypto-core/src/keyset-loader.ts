@@ -31,9 +31,7 @@ export function loadEncryptionKeyset(mode?: string): KeysetHandle {
   }
 
   if (!devWarningEmitted) {
-    console.warn(
-      '[crypto-core] INSECURE-DEV-ONLY keyset loaded \u2014 never use in production',
-    );
+    console.warn('[crypto-core] INSECURE-DEV-ONLY keyset loaded \u2014 never use in production');
     devWarningEmitted = true;
   }
 

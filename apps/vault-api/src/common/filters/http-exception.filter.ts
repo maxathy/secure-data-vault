@@ -1,10 +1,4 @@
-import {
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  Logger,
-  ExceptionFilter,
-} from '@nestjs/common';
+import { Catch, ArgumentsHost, HttpException, Logger, ExceptionFilter } from '@nestjs/common';
 import { Response, Request } from 'express';
 import type { Rfc7807Error } from '@secure-data-vault/shared-types';
 
@@ -43,8 +37,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status =
-      exception instanceof HttpException ? exception.getStatus() : 500;
+    const status = exception instanceof HttpException ? exception.getStatus() : 500;
 
     // If the exception already carries an RFC 7807 body (e.g., from
     // ZodValidationException), forward it directly.
@@ -79,10 +72,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       detail: this.extractDetail(exception),
     };
 
-    response
-      .status(status)
-      .header('Content-Type', 'application/problem+json')
-      .json(body);
+    response.status(status).header('Content-Type', 'application/problem+json').json(body);
   }
 
   private extractDetail(exception: unknown): string {

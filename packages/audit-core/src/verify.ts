@@ -14,10 +14,7 @@ import { verifySignature } from './hmac.js';
  * Returns a result indicating whether the full chain is valid, or
  * where the first divergence was detected.
  */
-export function verifyChain(
-  entries: AuditEntry[],
-  macKey: Buffer,
-): VerifyChainResult {
+export function verifyChain(entries: AuditEntry[], macKey: Buffer): VerifyChainResult {
   if (entries.length === 0) {
     return { status: 'full', checkedRows: 0, firstDivergentSequence: null };
   }

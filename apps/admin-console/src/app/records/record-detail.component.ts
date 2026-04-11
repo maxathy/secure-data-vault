@@ -18,15 +18,21 @@ import { ApiService, RecordResponse } from '../shared/api.service';
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
             <div>
               <label>Record ID</label>
-              <p><code>{{ record.id }}</code></p>
+              <p>
+                <code>{{ record.id }}</code>
+              </p>
             </div>
             <div>
               <label>Tenant ID</label>
-              <p><code>{{ record.tenantId }}</code></p>
+              <p>
+                <code>{{ record.tenantId }}</code>
+              </p>
             </div>
             <div>
               <label>Owner ID</label>
-              <p><code>{{ record.ownerId }}</code></p>
+              <p>
+                <code>{{ record.ownerId }}</code>
+              </p>
             </div>
             <div>
               <label>Version</label>
@@ -34,11 +40,11 @@ import { ApiService, RecordResponse } from '../shared/api.service';
             </div>
             <div>
               <label>Created</label>
-              <p>{{ record.createdAt | date:'medium' }}</p>
+              <p>{{ record.createdAt | date: 'medium' }}</p>
             </div>
             <div>
               <label>Updated</label>
-              <p>{{ record.updatedAt | date:'medium' }}</p>
+              <p>{{ record.updatedAt | date: 'medium' }}</p>
             </div>
           </div>
         </div>
@@ -51,7 +57,9 @@ import { ApiService, RecordResponse } from '../shared/api.service';
               AES-256-GCM with AAD binding to record + tenant
             </span>
           </div>
-          <pre style="margin: 0; white-space: pre-wrap; font-size: 0.875rem; color: #4ade80">{{ record.payload | json }}</pre>
+          <pre style="margin: 0; white-space: pre-wrap; font-size: 0.875rem; color: #4ade80">{{
+            record.payload | json
+          }}</pre>
         </div>
       </div>
 

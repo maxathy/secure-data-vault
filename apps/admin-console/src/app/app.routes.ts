@@ -19,8 +19,7 @@ export const routes: Routes = [
   },
   {
     path: 'audit',
-    loadComponent: () =>
-      import('./audit/audit-log.component').then((m) => m.AuditLogComponent),
+    loadComponent: () => import('./audit/audit-log.component').then((m) => m.AuditLogComponent),
   },
   {
     path: 'audit/verify',

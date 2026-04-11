@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  ConflictException,
-  Logger,
-} from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, ConflictException, Logger } from '@nestjs/common';
 import { eq, and, sql } from 'drizzle-orm';
 import { DRIZZLE, type DrizzleDB } from '../db/drizzle.provider';
 import { records } from '../db/schema';
@@ -53,10 +47,7 @@ export class RecordsService {
   }
 
   async findOne(id: string): Promise<RecordResponse> {
-    const [row] = await this.db
-      .select()
-      .from(records)
-      .where(eq(records.id, id));
+    const [row] = await this.db.select().from(records).where(eq(records.id, id));
 
     if (!row) {
       throw new NotFoundException({
@@ -78,11 +69,7 @@ export class RecordsService {
     return this.toResponse(row, payload);
   }
 
-  async update(
-    id: string,
-    dto: UpdateRecordDto,
-    tenantId: string,
-  ): Promise<RecordResponse> {
+  async update(id: string, dto: UpdateRecordDto, tenantId: string): Promise<RecordResponse> {
     // Re-encrypt the updated payload
     const plaintext = JSON.stringify(dto.payload);
     const envelope = await this.cryptoService.encrypt(plaintext, {

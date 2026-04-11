@@ -1,19 +1,10 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable, tap } from 'rxjs';
 import { createHash } from 'node:crypto';
 import { Request } from 'express';
 import { AuditService } from '../../audit/audit.service';
-import {
-  AUDIT_ACTION_KEY,
-  AUDIT_RESOURCE_TYPE_KEY,
-} from '../decorators/audit-action.decorator';
+import { AUDIT_ACTION_KEY, AUDIT_RESOURCE_TYPE_KEY } from '../decorators/audit-action.decorator';
 
 /**
  * Global interceptor that appends an audit log entry for every
@@ -67,7 +58,8 @@ export class AuditInterceptor implements NestInterceptor {
               typeof responseBody === 'object' && responseBody !== null
                 ? ((responseBody as Record<string, unknown>)['id'] as string | undefined)
                 : undefined;
-            const resourceId = (typeof paramId === 'string' ? paramId : undefined) ?? bodyId ?? null;
+            const resourceId =
+              (typeof paramId === 'string' ? paramId : undefined) ?? bodyId ?? null;
 
             await this.auditService.append({
               actorId: actorId ?? '00000000-0000-0000-0000-000000000000',

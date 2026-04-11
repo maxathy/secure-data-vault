@@ -6,13 +6,13 @@ Reference architecture for storing regulated data with application-layer encrypt
 
 Yarn 4 monorepo with `nodeLinker: node-modules`.
 
-| Workspace | Purpose |
-|-----------|---------|
-| `packages/shared-types` | Zod schemas + inferred TS types for all API boundaries |
-| `packages/crypto-core` | AES-256-GCM envelope encryption (zero external deps) |
-| `packages/audit-core` | Hash-chained audit log with HMAC-SHA-256 (zero external deps) |
-| `apps/vault-api` | NestJS 11 API backed by Postgres 16 via Drizzle ORM |
-| `apps/admin-console` | Angular 21 SPA for record management and audit inspection |
+| Workspace               | Purpose                                                       |
+| ----------------------- | ------------------------------------------------------------- |
+| `packages/shared-types` | Zod schemas + inferred TS types for all API boundaries        |
+| `packages/crypto-core`  | AES-256-GCM envelope encryption (zero external deps)          |
+| `packages/audit-core`   | Hash-chained audit log with HMAC-SHA-256 (zero external deps) |
+| `apps/vault-api`        | NestJS 11 API backed by Postgres 16 via Drizzle ORM           |
+| `apps/admin-console`    | Angular 21 SPA for record management and audit inspection     |
 
 ## Strict Rules
 

@@ -27,9 +27,7 @@ export function computePrevHash(previousEntry: AuditEntry | null): string {
  * Compute the entry_hash for an entry: SHA-256 of the entry's own fields
  * (including prevHash, excluding entryHash and signature).
  */
-export function computeEntryHash(
-  entry: Omit<AuditEntry, 'entryHash' | 'signature'>,
-): string {
+export function computeEntryHash(entry: Omit<AuditEntry, 'entryHash' | 'signature'>): string {
   const payload = canonicalize({
     sequence: entry.sequence.toString(),
     timestamp: entry.timestamp,

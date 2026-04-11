@@ -98,9 +98,9 @@ All three packages use only Node.js built-in modules (`crypto`). This is intenti
 
 ## Database Schema
 
-| Table       | Key Columns                                         | Notes                          |
-| ----------- | --------------------------------------------------- | ------------------------------ |
-| `tenants`   | id, name, created_at                                | Logical data isolation         |
-| `users`     | id, tenant_id (FK), email, role, created_at         | Per-tenant users               |
-| `records`   | id, tenant_id (FK), encrypted_payload, version      | Envelope-encrypted JSONB       |
-| `audit_log` | sequence (bigserial), prev_hash, entry_hash, hmac   | Append-only, hash-chained      |
+| Table       | Key Columns                                       | Notes                     |
+| ----------- | ------------------------------------------------- | ------------------------- |
+| `tenants`   | id, name, created_at                              | Logical data isolation    |
+| `users`     | id, tenant_id (FK), email, role, created_at       | Per-tenant users          |
+| `records`   | id, tenant_id (FK), encrypted_payload, version    | Envelope-encrypted JSONB  |
+| `audit_log` | sequence (bigserial), prev_hash, entry_hash, hmac | Append-only, hash-chained |

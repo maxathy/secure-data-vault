@@ -29,7 +29,10 @@ export async function decrypt(
   const encryptedDataKey = Buffer.from(envelope.encryptedDataKey, 'base64');
   const kekIv = encryptedDataKey.subarray(0, IV_LENGTH);
   const kekTag = encryptedDataKey.subarray(encryptedDataKey.length - AUTH_TAG_LENGTH);
-  const wrappedDek = encryptedDataKey.subarray(IV_LENGTH, encryptedDataKey.length - AUTH_TAG_LENGTH);
+  const wrappedDek = encryptedDataKey.subarray(
+    IV_LENGTH,
+    encryptedDataKey.length - AUTH_TAG_LENGTH,
+  );
 
   let dek: Buffer;
   try {

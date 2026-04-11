@@ -12,8 +12,8 @@ import { ApiService, TenantResponse, UserResponse } from '../shared/api.service'
     <div class="container" style="max-width: 600px">
       <h2>Create Encrypted Record</h2>
       <p style="color: #64748b; margin-bottom: 1.5rem">
-        The payload will be encrypted at the application layer using AES-256-GCM
-        before being stored in the database.
+        The payload will be encrypted at the application layer using AES-256-GCM before being stored
+        in the database.
       </p>
 
       <div class="card">
@@ -89,16 +89,14 @@ export class RecordCreateComponent implements OnInit {
     }
 
     this.submitting = true;
-    this.api
-      .createRecord({ tenantId: this.tenantId, ownerId: this.ownerId, payload })
-      .subscribe({
-        next: (record) => {
-          this.router.navigate(['/records', record.id]);
-        },
-        error: (err) => {
-          this.submitting = false;
-          this.error = err.error?.detail ?? 'Failed to create record.';
-        },
-      });
+    this.api.createRecord({ tenantId: this.tenantId, ownerId: this.ownerId, payload }).subscribe({
+      next: (record) => {
+        this.router.navigate(['/records', record.id]);
+      },
+      error: (err) => {
+        this.submitting = false;
+        this.error = err.error?.detail ?? 'Failed to create record.';
+      },
+    });
   }
 }

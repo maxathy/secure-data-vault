@@ -24,8 +24,7 @@ export function getRequestId(): string | undefined {
 @Injectable()
 export class CorrelationMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    const requestId =
-      (req.headers['x-request-id'] as string | undefined) ?? randomUUID();
+    const requestId = (req.headers['x-request-id'] as string | undefined) ?? randomUUID();
 
     // Echo the ID back in the response
     res.setHeader('X-Request-ID', requestId);

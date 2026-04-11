@@ -57,6 +57,7 @@ sequenceDiagram
 ```
 
 **Key properties:**
+
 - DEK is generated fresh per record (never reused)
 - DEK is zeroed from memory after use
 - AAD = `recordId:tenantId` — decrypt with wrong IDs fails with `AadMismatchError`
@@ -81,6 +82,7 @@ graph LR
 ```
 
 **Tamper detection covers:**
+
 - Modified fields (action, actor, timestamp, metadata)
 - Deleted rows (sequence gap detection)
 - Inserted rows (prevHash mismatch)
@@ -90,17 +92,17 @@ Verification: `GET /api/v1/audit/verify` walks the chain and reports `full` (int
 
 ## Threat Model
 
-| Threat | Mitigation |
-| --- | --- |
-| DB breach → plaintext exposure | AES-256-GCM envelope encryption |
-| Ciphertext transplant between tenants | AAD binds `recordId:tenantId` |
-| Audit log tampering | SHA-256 hash chain + HMAC signatures |
-| Audit row deletion | Sequence gap detection |
-| Key material in logs | `safeLog()` PII/secret redaction |
-| Decrypted payload in logs | Architectural rule: decrypt returns to controller only |
-| DEK in memory after use | `dek.fill(0)` in finally block |
-| Timing attack on HMAC | `crypto.timingSafeEqual()` |
-| Concurrent write conflicts | Optimistic concurrency (version column, 409 on mismatch) |
+| Threat                                | Mitigation                                               |
+| ------------------------------------- | -------------------------------------------------------- |
+| DB breach → plaintext exposure        | AES-256-GCM envelope encryption                          |
+| Ciphertext transplant between tenants | AAD binds `recordId:tenantId`                            |
+| Audit log tampering                   | SHA-256 hash chain + HMAC signatures                     |
+| Audit row deletion                    | Sequence gap detection                                   |
+| Key material in logs                  | `safeLog()` PII/secret redaction                         |
+| Decrypted payload in logs             | Architectural rule: decrypt returns to controller only   |
+| DEK in memory after use               | `dek.fill(0)` in finally block                           |
+| Timing attack on HMAC                 | `crypto.timingSafeEqual()`                               |
+| Concurrent write conflicts            | Optimistic concurrency (version column, 409 on mismatch) |
 
 Full threat model: [`.context/threat-model.md`](.context/threat-model.md)
 
@@ -230,6 +232,7 @@ yarn lint
 ```
 
 **Test coverage highlights:**
+
 - 14 crypto-core tests: round-trip, AAD binding, key rotation, Unicode, large payloads
 - 14 audit-core tests: chain verification, tamper detection, property-based fuzzing
 - E2E tests: encrypted record lifecycle, optimistic concurrency, audit verification

@@ -37,6 +37,7 @@ You generate Drizzle ORM schema changes and migrations for the Secure Data Vault
 ## Output
 
 Provide:
+
 1. The Drizzle schema change (TypeScript)
 2. The generated SQL migration (for review)
 3. A rollback strategy

@@ -51,10 +51,7 @@ export class RecordsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @AuditAction('records:delete', 'record')
-  async delete(
-    @Param('id') id: string,
-    @Body() body: { tenantId: string },
-  ): Promise<void> {
+  async delete(@Param('id') id: string, @Body() body: { tenantId: string }): Promise<void> {
     return this.recordsService.delete(id, body.tenantId);
   }
 }

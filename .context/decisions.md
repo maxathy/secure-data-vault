@@ -7,6 +7,7 @@
 
 **Context:**  
 The initial design referenced `@google-cloud/tink-typescript` for envelope encryption. Investigation revealed:
+
 - `@google-cloud/tink-typescript` does not exist as a published package
 - `tink-crypto` (v0.1.1) is an unmaintained WASM port with no updates since 2022
 - Tink's Java/Go/C++ implementations are mature, but the TypeScript ecosystem has no production-ready option
@@ -14,7 +15,8 @@ The initial design referenced `@google-cloud/tink-typescript` for envelope encry
 **Decision:**  
 Use Node.js built-in `crypto` module to implement AES-256-GCM envelope encryption. The keyset JSON format mirrors Tink's concepts (keysetHandle, keyId, key status, key templates) for familiarity.
 
-**Consequences:**  
+**Consequences:**
+
 - Zero runtime dependencies in crypto-core — auditable, portable, fast
 - Demonstrates deeper cryptographic understanding than wrapping a library
 - Must manually implement: key rotation logic, DEK wrapping, AAD binding, memory zeroing
@@ -29,13 +31,15 @@ Use Node.js built-in `crypto` module to implement AES-256-GCM envelope encryptio
 
 **Context:**  
 NestJS traditionally pairs with TypeORM or Prisma. Both have trade-offs:
+
 - TypeORM: decorator-heavy, runtime schema, poor TypeScript inference
 - Prisma: code generation step, binary engine dependency, limited raw SQL escape hatches
 
 **Decision:**  
 Use Drizzle ORM for type-safe, SQL-like query building with zero code generation.
 
-**Consequences:**  
+**Consequences:**
+
 - Schema defined in TypeScript (`src/db/schema.ts`) — single source of truth
 - `drizzle-kit` handles migrations via `push` (dev) or `generate` + `migrate` (prod)
 - SQL-like API is transparent — what you write is what executes
@@ -54,7 +58,8 @@ Monorepo tooling options: Nx, Turborepo, Lerna, or native package manager worksp
 **Decision:**  
 Use Yarn 4 with native workspaces. No additional build orchestration layer.
 
-**Consequences:**  
+**Consequences:**
+
 - Zero additional tooling to learn or configure
 - `workspace:*` protocol for internal dependencies
 - Topological build order via `yarn workspaces foreach -At run build`
@@ -72,10 +77,12 @@ A single keyset could be used for both AES-256-GCM encryption and HMAC-SHA-256 a
 
 **Decision:**  
 Maintain two separate keysets:
+
 - `INSECURE-DEV-ONLY.keyset.json` — encryption keys (AES-256-GCM)
 - `INSECURE-DEV-ONLY.mac.keyset.json` — MAC keys (HMAC-SHA-256)
 
-**Consequences:**  
+**Consequences:**
+
 - Each keyset can rotate independently
 - Cloud KMS maps to two separate crypto keys with different purposes (ENCRYPT_DECRYPT vs MAC)
 - Slightly more configuration, but eliminates a class of cryptographic misuse
@@ -93,7 +100,8 @@ REST APIs commonly return ad-hoc error formats (`{ error: "...", message: "..." 
 **Decision:**  
 All error responses use [RFC 7807](https://www.rfc-editor.org/rfc/rfc7807) `application/problem+json` format with `type`, `title`, `status`, `detail`, and optional `instance` (correlation ID) and `errors` (validation details).
 
-**Consequences:**  
+**Consequences:**
+
 - Single `HttpExceptionFilter` handles all error formatting
 - Clients can rely on a consistent error contract
 - Zod validation errors include per-field details in the `errors` array
@@ -112,7 +120,8 @@ Unit tests for audit chain verification can only test specific tamper scenarios 
 **Decision:**  
 Use `fast-check` for property-based testing: generate random audit chains (3-15 entries), mutate a random field at a random position, and assert verification always fails.
 
-**Consequences:**  
+**Consequences:**
+
 - 100 random scenarios per test run, covering mutations the author didn't explicitly imagine
 - Tests are slower (~2s) but provide much stronger guarantees
 - Complements (not replaces) explicit unit tests for specific scenarios

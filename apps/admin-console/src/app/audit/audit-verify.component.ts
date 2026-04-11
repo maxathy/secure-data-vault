@@ -9,12 +9,14 @@ import { ApiService, VerifyResult } from '../shared/api.service';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="container" style="max-width: 600px">
-      <a routerLink="/audit" style="font-size: 0.875rem; color: #64748b">&larr; Back to audit log</a>
+      <a routerLink="/audit" style="font-size: 0.875rem; color: #64748b"
+        >&larr; Back to audit log</a
+      >
 
       <h2 style="margin-top: 1rem">Audit Chain Verification</h2>
       <p style="color: #64748b; margin-bottom: 1.5rem">
-        Walks every audit log entry and verifies hash linkage,
-        entry hashes, sequence continuity, and HMAC signatures.
+        Walks every audit log entry and verifies hash linkage, entry hashes, sequence continuity,
+        and HMAC signatures.
       </p>
 
       <div class="card" *ngIf="result; else loading">
@@ -36,7 +38,10 @@ import { ApiService, VerifyResult } from '../shared/api.service';
           <p style="margin-top: 1rem; color: #94a3b8">
             {{ result.checkedRows }} row{{ result.checkedRows !== 1 ? 's' : '' }} verified
           </p>
-          <p *ngIf="result.firstDivergentSequence !== null" style="color: #f87171; margin-top: 0.5rem">
+          <p
+            *ngIf="result.firstDivergentSequence !== null"
+            style="color: #f87171; margin-top: 0.5rem"
+          >
             Chain broken at sequence {{ result.firstDivergentSequence }}
           </p>
         </div>
@@ -48,9 +53,7 @@ import { ApiService, VerifyResult } from '../shared/api.service';
         </div>
       </ng-template>
 
-      <button class="btn btn-primary" style="margin-top: 1rem" (click)="verify()">
-        Re-verify
-      </button>
+      <button class="btn btn-primary" style="margin-top: 1rem" (click)="verify()">Re-verify</button>
     </div>
   `,
 })

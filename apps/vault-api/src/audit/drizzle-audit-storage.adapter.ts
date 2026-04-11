@@ -47,11 +47,7 @@ export class DrizzleAuditStorage implements AuditStorage {
   }
 
   async getLatest(): Promise<AuditEntry | null> {
-    const [row] = await this.db
-      .select()
-      .from(auditLog)
-      .orderBy(desc(auditLog.sequence))
-      .limit(1);
+    const [row] = await this.db.select().from(auditLog).orderBy(desc(auditLog.sequence)).limit(1);
 
     return row ? this.toAuditEntry(row) : null;
   }

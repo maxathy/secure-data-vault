@@ -53,9 +53,7 @@ describe('Audit (e2e)', () => {
     }
 
     // Verify the audit chain
-    const verifyRes = await request(app.getHttpServer())
-      .get('/api/v1/audit/verify')
-      .expect(200);
+    const verifyRes = await request(app.getHttpServer()).get('/api/v1/audit/verify').expect(200);
 
     expect(verifyRes.body.status).toBe('full');
     expect(verifyRes.body.checkedRows).toBeGreaterThan(0);
@@ -63,9 +61,7 @@ describe('Audit (e2e)', () => {
   });
 
   it('audit log lists entries in sequence order', async () => {
-    const listRes = await request(app.getHttpServer())
-      .get('/api/v1/audit')
-      .expect(200);
+    const listRes = await request(app.getHttpServer()).get('/api/v1/audit').expect(200);
 
     expect(Array.isArray(listRes.body)).toBe(true);
     expect(listRes.body.length).toBeGreaterThan(0);

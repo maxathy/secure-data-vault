@@ -27,10 +27,7 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<UserResponse> {
-    const [row] = await this.db
-      .select()
-      .from(users)
-      .where(eq(users.id, id));
+    const [row] = await this.db.select().from(users).where(eq(users.id, id));
 
     if (!row) {
       throw new NotFoundException({

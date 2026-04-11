@@ -5,6 +5,7 @@ export default defineConfig({
   out: './src/db/migrations',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env['DATABASE_URL'] ?? 'postgresql://vault:vault_dev_password@localhost:5432/vault',
+    url:
+      process.env['DATABASE_URL'] ?? 'postgresql://vault:vault_dev_password@localhost:5432/vault',
   },
 });

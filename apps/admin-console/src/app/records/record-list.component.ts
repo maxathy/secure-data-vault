@@ -9,7 +9,9 @@ import { ApiService, RecordResponse } from '../shared/api.service';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="container">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem"
+      >
         <h2>Encrypted Records</h2>
         <a routerLink="/records/new" class="btn btn-primary">+ Create Record</a>
       </div>
@@ -27,13 +29,20 @@ import { ApiService, RecordResponse } from '../shared/api.service';
           </thead>
           <tbody>
             <tr *ngFor="let record of records">
-              <td><code>{{ record.id | slice:0:8 }}...</code></td>
-              <td><code>{{ record.tenantId | slice:0:8 }}...</code></td>
-              <td>v{{ record.version }}</td>
-              <td>{{ record.createdAt | date:'short' }}</td>
               <td>
-                <a [routerLink]="['/records', record.id]" class="btn btn-primary"
-                   style="padding: 0.25rem 0.75rem; font-size: 0.75rem">
+                <code>{{ record.id | slice: 0 : 8 }}...</code>
+              </td>
+              <td>
+                <code>{{ record.tenantId | slice: 0 : 8 }}...</code>
+              </td>
+              <td>v{{ record.version }}</td>
+              <td>{{ record.createdAt | date: 'short' }}</td>
+              <td>
+                <a
+                  [routerLink]="['/records', record.id]"
+                  class="btn btn-primary"
+                  style="padding: 0.25rem 0.75rem; font-size: 0.75rem"
+                >
                   View
                 </a>
               </td>

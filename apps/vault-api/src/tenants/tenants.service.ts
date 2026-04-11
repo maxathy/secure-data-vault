@@ -9,10 +9,7 @@ export class TenantsService {
   constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
 
   async create(dto: CreateTenantDto): Promise<TenantResponse> {
-    const [row] = await this.db
-      .insert(tenants)
-      .values({ name: dto.name })
-      .returning();
+    const [row] = await this.db.insert(tenants).values({ name: dto.name }).returning();
 
     return this.toResponse(row!);
   }
@@ -23,10 +20,7 @@ export class TenantsService {
   }
 
   async findOne(id: string): Promise<TenantResponse> {
-    const [row] = await this.db
-      .select()
-      .from(tenants)
-      .where(eq(tenants.id, id));
+    const [row] = await this.db.select().from(tenants).where(eq(tenants.id, id));
 
     if (!row) {
       throw new NotFoundException({

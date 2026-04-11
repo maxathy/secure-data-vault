@@ -12,11 +12,7 @@ export function signEntryHash(entryHash: string, macKey: Buffer): string {
  * Verify an HMAC-SHA-256 signature over an entry hash.
  * Uses timing-safe comparison to prevent timing attacks.
  */
-export function verifySignature(
-  entryHash: string,
-  signature: string,
-  macKey: Buffer,
-): boolean {
+export function verifySignature(entryHash: string, signature: string, macKey: Buffer): boolean {
   const expected = createHmac('sha256', macKey).update(entryHash).digest();
   const actual = Buffer.from(signature, 'base64');
 

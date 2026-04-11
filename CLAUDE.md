@@ -28,7 +28,8 @@ Yarn 4 monorepo with `nodeLinker: node-modules`.
 yarn install            # Install all workspace dependencies
 yarn build              # Build packages (topological) then apps
 yarn test               # Run all unit tests
-docker compose up -d    # Postgres 16 + vault-api with dev keyset
+yarn dev                # Local dev: Postgres (Docker) + API + UI with hot reload
+docker compose up -d    # Full Docker: Postgres + vault-api + admin-console (nginx)
 yarn workspace @secure-data-vault/vault-api test:e2e  # E2E tests (needs Postgres)
 ```
 

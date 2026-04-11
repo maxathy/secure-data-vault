@@ -114,40 +114,31 @@ Full threat model: [`.context/threat-model.md`](.context/threat-model.md)
 - Yarn (corepack enabled)
 - Docker & Docker Compose
 
-### Development
+### Option A: Full Docker (simplest)
 
-```bash
-# Enable Yarn via corepack
-corepack enable
-
-# Install dependencies
-yarn install
-
-# Start PostgreSQL
-docker compose up -d postgres
-
-# Build all packages (topological order)
-yarn build
-
-# Push schema to dev database
-cd apps/vault-api && npx drizzle-kit push && cd ../..
-
-# Start the API
-yarn --cwd apps/vault-api start:dev
-
-# Run all tests
-yarn test
-```
-
-The API is available at `http://localhost:3000/api/v1/health`.
-
-### Docker Compose (full stack)
+Starts Postgres, vault-api (with auto-migration), and admin-console (nginx) in containers.
 
 ```bash
 docker compose up -d
-# Wait for health check
-curl http://localhost:3000/api/v1/health
 ```
+
+- **UI:** http://localhost:4200
+- **API:** http://localhost:3000/api/v1/health
+
+The vault-api container automatically runs `drizzle-kit push` on startup to sync the database schema.
+
+### Option B: Local dev with hot reload
+
+Runs the API and Angular dev server natively for fast iteration, with Postgres in Docker.
+
+```bash
+corepack enable
+yarn install
+yarn dev
+```
+
+- **UI:** http://localhost:4200 (Angular dev server, proxies `/api` to :3000)
+- **API:** http://localhost:3000 (NestJS with `--watch`)
 
 ### Example Workflow
 

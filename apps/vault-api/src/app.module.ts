@@ -6,6 +6,7 @@ import { CryptoModule } from './crypto/crypto.module';
 import { AuditModule } from './audit/audit.module';
 import { HealthModule } from './health/health.module';
 import { TenantsModule } from './tenants/tenants.module';
+import { UsersModule } from './users/users.module';
 import { CorrelationMiddleware } from './common/correlation/correlation.middleware';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ZodValidationInterceptor } from './common/pipes/zod-validation.pipe';
@@ -26,6 +27,7 @@ import { AuditInterceptor } from './common/interceptors/audit.interceptor';
     AuditModule,
     HealthModule,
     TenantsModule,
+    UsersModule,
   ],
   providers: [
     // Global guard

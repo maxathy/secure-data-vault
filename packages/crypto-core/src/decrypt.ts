@@ -62,8 +62,11 @@ export async function decrypt(
     return plaintext.toString('utf8');
   } catch (err) {
     dek.fill(0);
-    // GCM authentication failure indicates AAD mismatch or data tampering
-    if (err instanceof Error && err.message.includes('auth')) {
+    // GCM authentication failure indicates AAD mismatch or data tampering.
+    // Node.js crypto throws "Unsupported state or unable to authenticate data"
+    // when the auth tag or AAD verification fails.
+    const message = err instanceof Error ? err.message : String(err);
+    if (message.includes('authenticate') || message.includes('Unsupported state')) {
       throw new AadMismatchError();
     }
     throw new DecryptionError('Failed to decrypt payload', err);

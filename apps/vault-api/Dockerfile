@@ -53,10 +53,18 @@ COPY --from=builder /app/apps/vault-api/dist apps/vault-api/dist
 # DEV ONLY — production images should NOT include keysets
 COPY packages/crypto-core/keysets packages/crypto-core/keysets
 
+# Copy drizzle-kit and schema for auto-migration on startup
+COPY --from=builder /app/node_modules/drizzle-kit node_modules/drizzle-kit
+COPY apps/vault-api/drizzle.config.ts apps/vault-api/drizzle.config.ts
+COPY apps/vault-api/src/db/schema.ts apps/vault-api/src/db/schema.ts
+
+# Copy entrypoint script
+COPY apps/vault-api/entrypoint.sh apps/vault-api/entrypoint.sh
+
 # Non-root user
 RUN addgroup -g 1001 appgroup && adduser -u 1001 -G appgroup -s /bin/sh -D appuser
 USER appuser
 
 EXPOSE 3000
 
-CMD ["node", "apps/vault-api/dist/main.js"]
+ENTRYPOINT ["sh", "apps/vault-api/entrypoint.sh"]

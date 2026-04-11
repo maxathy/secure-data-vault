@@ -39,5 +39,15 @@ services:
       retries: 5
       start_period: 30s
 
+  admin-console:
+    build:
+      context: .
+      dockerfile: apps/admin-console/Dockerfile
+    ports:
+      - '4200:80'
+    depends_on:
+      vault-api:
+        condition: service_healthy
+
 volumes:
   pgdata:

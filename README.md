@@ -110,7 +110,7 @@ Full threat model: [`.context/threat-model.md`](.context/threat-model.md)
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 24+
 - Yarn (corepack enabled)
 - Docker & Docker Compose
 

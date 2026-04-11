@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/mcp-config.schema.json",
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://vault:vault_dev_password@localhost:5432/vault"
+      ],
+      "description": "Local development PostgreSQL for inspecting schema, running queries, and debugging data issues"
+    }
+  }
+}

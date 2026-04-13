@@ -3480,7 +3480,6 @@ __metadata:
     rxjs: "npm:~7.8.2"
     tslib: "npm:^2.8.0"
     typescript: "npm:~5.9.0"
-    zone.js: "npm:~0.15.0"
   languageName: unknown
   linkType: soft
 
@@ -10947,12 +10946,5 @@ __metadata:
   version: 3.25.76
   resolution: "zod@npm:3.25.76"
   checksum: 10c0/5718ec35e3c40b600316c5b4c5e4976f7fee68151bc8f8d90ec18a469be9571f072e1bbaace10f1e85cf8892ea12d90821b200e980ab46916a6166a4260a983c
-  languageName: node
-  linkType: hard
-
-"zone.js@npm:~0.15.0":
-  version: 0.15.1
-  resolution: "zone.js@npm:0.15.1"
-  checksum: 10c0/4eca000f90dbea1c34f62e88ce56910dace8cdecbe14747b214f2af37aa511264c7bd50faf3e9b00612e95dc4567da156a9690fef1983bfcf74604a630d190ef
   languageName: node
   linkType: hard

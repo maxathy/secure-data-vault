@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, of } from 'rxjs';
 import { ApiService, TenantResponse, UserResponse } from '../shared/api.service';
 
 @Component({
   selector: 'app-record-create',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="container" style="max-width: 600px">
       <h2>Create Encrypted Record</h2>
@@ -20,17 +21,33 @@ import { ApiService, TenantResponse, UserResponse } from '../shared/api.service'
         <form (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label for="tenant">Tenant</label>
-            <select id="tenant" [(ngModel)]="tenantId" name="tenantId" required>
+            <select
+              id="tenant"
+              name="tenantId"
+              required
+              [ngModel]="tenantId()"
+              (ngModelChange)="tenantId.set($event)"
+            >
               <option value="" disabled>Select a tenant</option>
-              <option *ngFor="let t of tenants" [value]="t.id">{{ t.name }}</option>
+              @for (t of tenants(); track t.id) {
+                <option [value]="t.id">{{ t.name }}</option>
+              }
             </select>
           </div>
 
           <div class="form-group">
             <label for="owner">Owner</label>
-            <select id="owner" [(ngModel)]="ownerId" name="ownerId" required>
+            <select
+              id="owner"
+              name="ownerId"
+              required
+              [ngModel]="ownerId()"
+              (ngModelChange)="ownerId.set($event)"
+            >
               <option value="" disabled>Select a user</option>
-              <option *ngFor="let u of users" [value]="u.id">{{ u.email }}</option>
+              @for (u of users(); track u.id) {
+                <option [value]="u.id">{{ u.email }}</option>
+              }
             </select>
           </div>
 
@@ -38,65 +55,68 @@ import { ApiService, TenantResponse, UserResponse } from '../shared/api.service'
             <label for="payload">Payload (JSON)</label>
             <textarea
               id="payload"
-              [(ngModel)]="payloadJson"
               name="payload"
               rows="6"
               placeholder='{ "notes": "Sensitive data here" }'
               required
+              [ngModel]="payloadJson()"
+              (ngModelChange)="payloadJson.set($event)"
             ></textarea>
           </div>
 
-          <div *ngIf="error" style="color: #f87171; margin-bottom: 1rem; font-size: 0.875rem">
-            {{ error }}
-          </div>
+          @if (error()) {
+            <div style="color: #f87171; margin-bottom: 1rem; font-size: 0.875rem">
+              {{ error() }}
+            </div>
+          }
 
-          <button type="submit" class="btn btn-primary" [disabled]="submitting">
-            {{ submitting ? 'Encrypting...' : 'Encrypt & Store' }}
+          <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+            {{ submitting() ? 'Encrypting...' : 'Encrypt & Store' }}
           </button>
         </form>
       </div>
     </div>
   `,
 })
-export class RecordCreateComponent implements OnInit {
-  tenants: TenantResponse[] = [];
-  users: UserResponse[] = [];
-  tenantId = '';
-  ownerId = '';
-  payloadJson = '';
-  error = '';
-  submitting = false;
+export class RecordCreateComponent {
+  private readonly api = inject(ApiService);
+  private readonly router = inject(Router);
 
-  constructor(
-    private readonly api: ApiService,
-    private readonly router: Router,
-  ) {}
+  readonly tenants = toSignal(this.api.getTenants().pipe(catchError(() => of([] as TenantResponse[]))), {
+    initialValue: [] as TenantResponse[],
+  });
+  readonly users = toSignal(this.api.getUsers().pipe(catchError(() => of([] as UserResponse[]))), {
+    initialValue: [] as UserResponse[],
+  });
 
-  ngOnInit() {
-    this.api.getTenants().subscribe((t) => (this.tenants = t));
-    this.api.getUsers().subscribe((u) => (this.users = u));
-  }
+  readonly tenantId = signal('');
+  readonly ownerId = signal('');
+  readonly payloadJson = signal('');
+  readonly error = signal('');
+  readonly submitting = signal(false);
 
   onSubmit() {
-    this.error = '';
+    this.error.set('');
     let payload: Record<string, unknown>;
 
     try {
-      payload = JSON.parse(this.payloadJson);
+      payload = JSON.parse(this.payloadJson());
     } catch {
-      this.error = 'Invalid JSON payload.';
+      this.error.set('Invalid JSON payload.');
       return;
     }
 
-    this.submitting = true;
-    this.api.createRecord({ tenantId: this.tenantId, ownerId: this.ownerId, payload }).subscribe({
-      next: (record) => {
-        this.router.navigate(['/records', record.id]);
-      },
-      error: (err) => {
-        this.submitting = false;
-        this.error = err.error?.detail ?? 'Failed to create record.';
-      },
-    });
+    this.submitting.set(true);
+    this.api
+      .createRecord({ tenantId: this.tenantId(), ownerId: this.ownerId(), payload })
+      .subscribe({
+        next: (record) => {
+          this.router.navigate(['/records', record.id]);
+        },
+        error: (err) => {
+          this.submitting.set(false);
+          this.error.set(err?.error?.detail ?? 'Failed to create record.');
+        },
+      });
   }
 }

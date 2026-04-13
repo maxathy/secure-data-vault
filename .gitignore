@@ -46,3 +46,6 @@ infra/*.tfplan
 *.log
 tmp/
 PRD.md
+.angular/
+*.db
+*.db-lock

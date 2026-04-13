@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService, VerifyResult } from '../shared/api.service';
 
 @Component({
   selector: 'app-audit-verify',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, UpperCasePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="container" style="max-width: 600px">
       <a routerLink="/audit" style="font-size: 0.875rem; color: #64748b"
@@ -19,60 +19,59 @@ import { ApiService, VerifyResult } from '../shared/api.service';
         and HMAC signatures.
       </p>
 
-      <div class="card" *ngIf="result; else loading">
-        <div style="text-align: center; padding: 2rem">
-          <div style="font-size: 3rem; margin-bottom: 0.5rem">
-            {{ result.status === 'full' ? '&#9989;' : '&#10060;' }}
+      @if (result(); as r) {
+        <div class="card">
+          <div style="text-align: center; padding: 2rem">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem">
+              {{ r.status === 'full' ? '&#9989;' : '&#10060;' }}
+            </div>
+            <div>
+              <span
+                class="badge"
+                [class.badge-success]="r.status === 'full'"
+                [class.badge-danger]="r.status === 'failed'"
+                [class.badge-warning]="r.status === 'partial'"
+                style="font-size: 1rem; padding: 0.25rem 1rem"
+              >
+                {{ r.status | uppercase }}
+              </span>
+            </div>
+            <p style="margin-top: 1rem; color: #94a3b8">
+              {{ r.checkedRows }} row{{ r.checkedRows !== 1 ? 's' : '' }} verified
+            </p>
+            @if (r.firstDivergentSequence !== null) {
+              <p style="color: #f87171; margin-top: 0.5rem">
+                Chain broken at sequence {{ r.firstDivergentSequence }}
+              </p>
+            }
           </div>
-          <div>
-            <span
-              class="badge"
-              [class.badge-success]="result.status === 'full'"
-              [class.badge-danger]="result.status === 'failed'"
-              [class.badge-warning]="result.status === 'partial'"
-              style="font-size: 1rem; padding: 0.25rem 1rem"
-            >
-              {{ result.status | uppercase }}
-            </span>
-          </div>
-          <p style="margin-top: 1rem; color: #94a3b8">
-            {{ result.checkedRows }} row{{ result.checkedRows !== 1 ? 's' : '' }} verified
-          </p>
-          <p
-            *ngIf="result.firstDivergentSequence !== null"
-            style="color: #f87171; margin-top: 0.5rem"
-          >
-            Chain broken at sequence {{ result.firstDivergentSequence }}
-          </p>
         </div>
-      </div>
-
-      <ng-template #loading>
+      } @else {
         <div class="card" style="text-align: center; padding: 3rem">
-          <p style="color: #64748b">{{ error || 'Verifying chain integrity...' }}</p>
+          <p style="color: #64748b">{{ error() || 'Verifying chain integrity...' }}</p>
         </div>
-      </ng-template>
+      }
 
       <button class="btn btn-primary" style="margin-top: 1rem" (click)="verify()">Re-verify</button>
     </div>
   `,
 })
-export class AuditVerifyComponent implements OnInit {
-  result: VerifyResult | null = null;
-  error = '';
+export class AuditVerifyComponent {
+  private readonly api = inject(ApiService);
 
-  constructor(private readonly api: ApiService) {}
+  readonly result = signal<VerifyResult | null>(null);
+  readonly error = signal('');
 
-  ngOnInit() {
+  constructor() {
     this.verify();
   }
 
   verify() {
-    this.result = null;
-    this.error = '';
+    this.result.set(null);
+    this.error.set('');
     this.api.verifyAuditChain().subscribe({
-      next: (data) => (this.result = data),
-      error: () => (this.error = 'Failed to verify audit chain.'),
+      next: (data) => this.result.set(data),
+      error: () => this.error.set('Failed to verify audit chain.'),
     });
   }
 }

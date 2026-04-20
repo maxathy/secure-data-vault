@@ -8,10 +8,16 @@ export const CreateRecordSchema = z.object({
 export type CreateRecordDto = z.infer<typeof CreateRecordSchema>;
 
 export const UpdateRecordSchema = z.object({
+  tenantId: z.string().uuid(),
   payload: z.record(z.unknown()),
   version: z.number().int().positive(),
 });
 export type UpdateRecordDto = z.infer<typeof UpdateRecordSchema>;
+
+export const DeleteRecordSchema = z.object({
+  tenantId: z.string().uuid(),
+});
+export type DeleteRecordDto = z.infer<typeof DeleteRecordSchema>;
 
 /** Shape of the encrypted_payload JSONB column stored in Postgres. */
 export const EncryptedEnvelopeSchema = z.object({

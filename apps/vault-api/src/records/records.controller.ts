@@ -16,8 +16,10 @@ import { ZodBody } from '../common/decorators/zod-schema.decorator';
 import {
   CreateRecordSchema,
   UpdateRecordSchema,
+  DeleteRecordSchema,
   type CreateRecordDto,
   type UpdateRecordDto,
+  type DeleteRecordDto,
   type RecordResponse,
 } from '@secure-data-vault/shared-types';
 
@@ -41,17 +43,15 @@ export class RecordsController {
   @Put(':id')
   @ZodBody(UpdateRecordSchema)
   @AuditAction('records:update', 'record')
-  async update(
-    @Param('id') id: string,
-    @Body() dto: UpdateRecordDto & { tenantId: string },
-  ): Promise<RecordResponse> {
+  async update(@Param('id') id: string, @Body() dto: UpdateRecordDto): Promise<RecordResponse> {
     return this.recordsService.update(id, dto, dto.tenantId);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ZodBody(DeleteRecordSchema)
   @AuditAction('records:delete', 'record')
-  async delete(@Param('id') id: string, @Body() body: { tenantId: string }): Promise<void> {
+  async delete(@Param('id') id: string, @Body() body: DeleteRecordDto): Promise<void> {
     return this.recordsService.delete(id, body.tenantId);
   }
 }

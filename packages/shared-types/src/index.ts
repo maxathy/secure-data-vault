@@ -24,10 +24,12 @@ export {
 export {
   CreateRecordSchema,
   UpdateRecordSchema,
+  DeleteRecordSchema,
   EncryptedEnvelopeSchema,
   RecordResponseSchema,
   type CreateRecordDto,
   type UpdateRecordDto,
+  type DeleteRecordDto,
   type EncryptedEnvelope,
   type RecordResponse,
 } from './record.schema.js';

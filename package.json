@@ -23,5 +23,8 @@
     "eslint": "^9.27.0",
     "prettier": "^3.5.3",
     "typescript": "~5.9.0"
+  },
+  "resolutions": {
+    "esbuild": "^0.28.0"
   }
 }

@@ -41,10 +41,22 @@ export interface VerifyChainResult {
 /**
  * Storage adapter interface for the audit log.
  * Implementations must be append-only — no update or delete operations.
+ *
+ * The hash chain requires the sequence number to be known before the
+ * entry is persisted (entryHash is computed over the sequence). A
+ * correct adapter therefore serializes the reserve-sequence/insert pair
+ * so that chained appends cannot interleave.
  */
 export interface AuditStorage {
-  /** Append a fully computed audit entry. Returns the entry with its assigned sequence. */
-  append(entry: Omit<AuditEntry, 'sequence'>): Promise<AuditEntry>;
+  /**
+   * Atomically: read the latest entry, reserve the next sequence, compute
+   * the final entry via the caller's callback, and persist it. The adapter
+   * is responsible for holding whatever lock or transaction is needed to
+   * keep concurrent appends from racing on the chain.
+   */
+  appendAtomic(
+    build: (latest: AuditEntry | null, nextSequence: bigint) => AuditEntry,
+  ): Promise<AuditEntry>;
   /** Retrieve entries in sequence order, optionally bounded by from/to. */
   getRange(from?: bigint, to?: bigint): Promise<AuditEntry[]>;
   /** Retrieve the most recent entry, or null if the log is empty. */

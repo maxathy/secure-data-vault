@@ -9,13 +9,14 @@ export class InMemoryAuditStorage implements AuditStorage {
   private entries: AuditEntry[] = [];
   private nextSequence = 1n;
 
-  async append(entry: Omit<AuditEntry, 'sequence'>): Promise<AuditEntry> {
-    const fullEntry: AuditEntry = {
-      ...entry,
-      sequence: this.nextSequence++,
-    };
-    this.entries.push(fullEntry);
-    return fullEntry;
+  async appendAtomic(
+    build: (latest: AuditEntry | null, nextSequence: bigint) => AuditEntry,
+  ): Promise<AuditEntry> {
+    const latest = this.entries.length > 0 ? this.entries[this.entries.length - 1]! : null;
+    const sequence = this.nextSequence++;
+    const entry = build(latest, sequence);
+    this.entries.push(entry);
+    return entry;
   }
 
   async getRange(from?: bigint, to?: bigint): Promise<AuditEntry[]> {

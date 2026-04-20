@@ -35,10 +35,16 @@ export class ZodValidationInterceptor implements NestInterceptor {
       request.body = this.validate(bodySchema, request.body, 'body');
     }
 
-    // Validate query
+    // Validate query. Express 5 makes req.query a read-only getter, so we
+    // redefine the property instead of assigning to it.
     const querySchema = this.reflector.get<ZodSchema | undefined>(ZOD_QUERY_SCHEMA, handler);
     if (querySchema) {
-      request.query = this.validate(querySchema, request.query, 'query');
+      Object.defineProperty(request, 'query', {
+        value: this.validate(querySchema, request.query, 'query'),
+        writable: true,
+        configurable: true,
+        enumerable: true,
+      });
     }
 
     // Validate params

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq, gte, lte, and, desc } from 'drizzle-orm';
+import { gte, lte, and, desc } from 'drizzle-orm';
 import type { AuditEntry, AuditStorage } from '@secure-data-vault/audit-core';
 import { DRIZZLE, type DrizzleDB } from '../db/drizzle.provider';
 import { auditLog } from '../db/schema';

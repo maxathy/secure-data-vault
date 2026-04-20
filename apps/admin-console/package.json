@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "echo \"No tests configured\" && exit 0",
-    "lint": "ng lint",
+    "lint": "eslint src/",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

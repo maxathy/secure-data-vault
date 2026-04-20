@@ -6,7 +6,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ZodSchema, ZodError } from 'zod';
 import {
   ZOD_BODY_SCHEMA,

@@ -56,14 +56,6 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # The INSECURE-DEV-ONLY keyset files are intentionally committed
-          # and clearly labeled. They are NOT real secrets.
-          GITLEAKS_CONFIG: |
-            [allowlist]
-              paths = [
-                "packages/crypto-core/keysets/INSECURE-DEV-ONLY\\.keyset\\.json",
-                "packages/crypto-core/keysets/INSECURE-DEV-ONLY\\.mac\\.keyset\\.json"
-              ]
 
   trivy:
     runs-on: ubuntu-latest

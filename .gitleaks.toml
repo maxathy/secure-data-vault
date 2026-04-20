@@ -1,0 +1,7 @@
+# The INSECURE-DEV-ONLY keyset files are intentionally committed
+# and clearly labeled. They are NOT real secrets.
+[allowlist]
+  paths = [
+    "packages/crypto-core/keysets/INSECURE-DEV-ONLY\\.keyset\\.json",
+    "packages/crypto-core/keysets/INSECURE-DEV-ONLY\\.mac\\.keyset\\.json"
+  ]

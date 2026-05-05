@@ -1,5 +1,7 @@
 # Secure Data Vault
 
+![ci](https://img.shields.io/github/actions/workflow/status/maxathy/secure-data-vault/ci.yml?branch=main)
+
 Production-grade reference architecture for storing regulated data (PHI, PII, financial records) with application-layer envelope encryption, tamper-evident audit trails, and type-safe validation.
 
 Built with **NestJS 11**, **Angular 21**, **Drizzle ORM**, and **PostgreSQL 16**.
